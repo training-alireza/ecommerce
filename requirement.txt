@@ -4,13 +4,17 @@ backports.zoneinfo==0.2.1
 certifi==2022.6.15
 charset-normalizer==2.1.0
 Django==4.0.5
+django-js-asset==2.0.0
+django-mptt==0.13.4
 factory-boy==3.2.1
 Faker==13.14.0
 idna==3.3
 inflection==0.5.1
 iniconfig==1.1.1
 packaging==21.3
+Pillow==9.1.1
 pluggy==1.0.0
+psycopg2-binary==2.9.2
 py==1.11.0
 pyparsing==3.0.9
 pytest==6.2.5

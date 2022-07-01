@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Detail</title>
+</head>
+<body>
+    <h1>Product Detail </h1>
+
+   {% for item in data %}
+        <p>id = {{ item.id }}</p>
+        <p>sku = {{ item.sku }}</p>
+        <p>name = {{ item.product__name }}</p>
+        <p>store price = {{ item.store_price }}</p>
+        <p>inventory unit = {{ item.product_inventory__unit }}</p>
+       <br>
+       <hr>
+   {% endfor %}
+
+</body>
+</html>

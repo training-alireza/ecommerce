@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Category By ID</title>
+</head>
+<body>
+    <h1>Category By ID</h1>
+
+    <ul>
+        {% for item in data %}
+            <li>
+                {{ item.name }}
+                <a href="{% url 'demo:product_detail' slug=item.slug %}">view</a>
+            </li>
+            <li>{{ item.id }}</li>
+            <li>category name: {{ item.product__store_price }}</li>
+            <br>
+            <hr>
+            <br>
+         {% endfor %}
+    </ul>
+
+</body>
+</html>

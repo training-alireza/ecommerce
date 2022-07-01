@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Categories</title>
+</head>
+<body>
+    {% for item in  data %}
+
+        <a href="{% url 'demo:product_by_category' category=item.name %}">{{ item.name }}</a>
+        <br>
+
+    {% endfor %}
+</body>
+</html>

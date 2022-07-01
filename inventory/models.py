@@ -8,7 +8,7 @@ from mptt.models import MPTTModel, TreeForeignKey, TreeManyToManyField
 
 class Category(MPTTModel):
     name = models.CharField(_('category name'), max_length=100)
-    slug = models.SlugField(_('category safe url'), max_length=150)
+    slug = models.SlugField(_('category safe url'), allow_unicode=True, max_length=150)
     is_active = models.BooleanField(_('is active'), default=True)
     parent = TreeForeignKey("self", on_delete=models.PROTECT, related_name='children',
                             null=True, blank=True, verbose_name='parent of category')
@@ -27,19 +27,12 @@ class Category(MPTTModel):
 class Product(models.Model):
     web_id = models.CharField(_('product website id'), unique=True, max_length=50)
     name = models.CharField(_('product name'), max_length=255)
-    slug = models.CharField(_('product safe url'), max_length=255)
+    slug = models.SlugField(_('product safe url'), allow_unicode=True, max_length=255)
     description = models.TextField(_('product description'))
     category = TreeManyToManyField(Category)
     is_active = models.BooleanField(_('product visibility'), default=True)
     created_at = models.DateTimeField(_('date product created'), auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(_('date product last updated'), auto_now=True)
-
-    def __str__(self):
-        return f'{self.name}'
-
-
-class ProductType(models.Model):
-    name = models.CharField(_('name'), max_length=150, unique=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -69,6 +62,18 @@ class ProductAttributeValue(models.Model):
         return f'{self.product_attribute.name}:{self.attribute_value}'
 
 
+class ProductType(models.Model):
+    name = models.CharField(_('name'), max_length=150, unique=True)
+    product_type_attributes = models.ManyToManyField(
+        ProductAttribute,
+        related_name='product_type_attribute',
+        through='ProductTypeAttribute'
+    )
+
+    def __str__(self):
+        return f'{self.name}'
+
+
 class ProductInventory(models.Model):
     sku = models.CharField(_('sku'), max_length=20, unique=True)
     universal_product_code = models.CharField(_('universal product code'), max_length=12, unique=True)
@@ -78,6 +83,7 @@ class ProductInventory(models.Model):
     attribute_values = models.ManyToManyField(ProductAttributeValue, related_name='product_attribute_values',
                                               through="ProductAttributeValues")
     is_active = models.BooleanField(_('product visibility'), default=True)
+    is_default = models.BooleanField(_('default selection'), default=False)
     retail_price = models.IntegerField(_('retail price'))
     store_price = models.IntegerField(_('store price'))
     sale_price = models.IntegerField(_('sale price'))
@@ -128,3 +134,19 @@ class ProductAttributeValues(models.Model):
 
     class Meta:
         unique_together = (("attributevalues", "productinventory"),)
+
+
+class ProductTypeAttribute(models.Model):
+    product_attribute = models.ForeignKey(
+        ProductAttribute,
+        related_name='productattribute',
+        on_delete=models.PROTECT
+    )
+    product_type = models.ForeignKey(
+        ProductType,
+        related_name='producttype',
+        on_delete=models.PROTECT
+    )
+
+    class Meta:
+        unique_together = (("product_attribute", "product_type"),)
